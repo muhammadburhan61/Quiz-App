@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Home - Quiz App{% endblock %}
+{% block content %}
+<h1 id="welcome-msg">Welcome to the Quiz App!</h1>
+<p>Test your skills with our fun quizzes.</p>
+<button id="start-quiz-btn">Start Quiz</button>
+
+<script>
+  // Fade in the welcome message
+  const welcomeMsg = document.getElementById('welcome-msg');
+  welcomeMsg.style.opacity = 0;
+  let opacity = 0;
+  const fadeIn = setInterval(() => {
+      if (opacity >= 1) clearInterval(fadeIn);
+      opacity += 0.02;
+      welcomeMsg.style.opacity = opacity;
+  }, 30);
+
+  // Button click to navigate to quiz or login
+  document.getElementById('start-quiz-btn').addEventListener('click', () => {
+      {% if 'user' in session %}
+          window.location.href = "{{ url_for('quiz') }}";
+      {% else %}
+          window.location.href = "{{ url_for('login') }}";
+      {% endif %}
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Quiz - Quiz App{% endblock %}
+{% block content %}
+
+<h2>Quiz Time!</h2>
+<p style="text-align: center; font-style: italic; margin-bottom: 25px;">
+    Welcome, <strong>{{ user }}</strong>! Good luck!
+</p>
+
+<form method="POST" id="quiz-form">
+    {% for q in questions %}
+        {% set q_index = loop.index0 %}
+        <div class="question">
+            <p>{{ loop.index }}. {{ q.question }}</p>
+            {% for opt in q.options %}
+                <label>
+                    <input type="radio" name="q{{ q_index }}" value="{{ opt }}" required>
+                    {{ opt }}
+                </label><br>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <button type="submit">Submit Quiz</button>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const questions = document.querySelectorAll('.question');
+    const totalQuestions = questions.length;
+
+    const counter = document.createElement('div');
+    counter.style.textAlign = 'center';
+    counter.style.marginBottom = '20px';
+    counter.style.fontWeight = '600';
+    counter.style.fontSize = '1.1rem';
+    counter.textContent = `Question 1 of ${totalQuestions}`;
+
+    const form = document.getElementById('quiz-form');
+    form.parentNode.insertBefore(counter, form);
+
+    function updateCounter() {
+      for (let i = 0; i < totalQuestions; i++) {
+        const options = questions[i].querySelectorAll('input[type="radio"]');
+        const answered = Array.from(options).some(opt => opt.checked);
+        if (!answered) {
+          counter.textContent = `Question ${i + 1} of ${totalQuestions}`;
+          return;
+        }
+      }
+      counter.textContent = `All questions answered! Ready to submit.`;
+    }
+
+    questions.forEach((question) => {
+      const options = question.querySelectorAll('label');
+      options.forEach(label => {
+        label.addEventListener('click', () => {
+          options.forEach(lab => lab.style.backgroundColor = '');
+          label.style.backgroundColor = '#dff9fb';
+          updateCounter();
+        });
+      });
+    });
+
+    updateCounter();
+
+    form.addEventListener('submit', e => {
+      for (let i = 0; i < totalQuestions; i++) {
+        const options = questions[i].querySelectorAll('input[type="radio"]');
+        const answered = Array.from(options).some(opt => opt.checked);
+        if (!answered) {
+          e.preventDefault();
+          alert(`Please answer question ${i + 1} before submitting.`);
+          return false;
+        }
+      }
+    });
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Login - Quiz App{% endblock %}
+{% block content %}
+<h2>Login</h2>
+{% if error %}
+  <p class="error">{{ error }}</p>
+{% endif %}
+<form id="login-form" method="POST" novalidate>
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="password" name="password" placeholder="Password" minlength="6" required />
+    <button type="submit">Login</button>
+</form>
+
+<script>
+  const form = document.getElementById('login-form');
+
+  form.addEventListener('submit', e => {
+    const email = form.email.value.trim();
+    const password = form.password.value.trim();
+    let valid = true;
+
+    if (!email || !email.includes('@')) {
+      alert("Please enter a valid email.");
+      valid = false;
+    }
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters.");
+      valid = false;
+    }
+
+    if (!valid) {
+      e.preventDefault();
+      form.classList.add('shake');
+      setTimeout(() => form.classList.remove('shake'), 500);
+    }
+  });
+</script>
+
+<style>
+  /* Shake animation */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-10px); }
+    40%, 80% { transform: translateX(10px); }
+  }
+
+  form.shake {
+    animation: shake 0.5s;
+  }
+</style>
+{% endblock %}

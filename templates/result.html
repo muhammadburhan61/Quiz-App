@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Results - Quiz App{% endblock %}
+{% block content %}
+<h2>Quiz Results</h2>
+<p style="text-align:center; font-size:1.3rem; margin:20px 0;">
+    Congrats, <strong>{{ user }}</strong>! You scored <span style="color:#27ae60;">{{ score }}</span> out of {{ total }}.
+</p>
+<button id="retry-btn">Try Again</button>
+<button id="home-btn">Go Home</button>
+
+<script

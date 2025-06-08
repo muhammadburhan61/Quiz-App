@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Register - Quiz App{% endblock %}
+{% block content %}
+<h2>Register</h2>
+{% if error %}
+  <p class="error">{{ error }}</p>
+{% endif %}
+<form id="register-form" method="POST" novalidate>
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="password" id="password" name="password" placeholder="Password" required />
+    <small id="password-strength" style="display:block; margin-bottom:10px;"></small>
+    <label>
+      <input type="checkbox" id="toggle-password" /> Show Password
+    </label>
+    <button type="submit">Register</button>
+</form>
+
+<script>
+  const passwordInput = document.getElementById('password');
+  const strengthMsg = document.getElementById('password-strength');
+  const togglePassword = document.getElementById('toggle-password');
+
+  passwordInput.addEventListener('input', () => {
+    const val = passwordInput.value;
+    let strength = '';
+    let color = '';
+
+    if (val.length < 6) {
+      strength = 'Too short';
+      color = 'red';
+    } else if (val.match(/[A-Z]/) && val.match(/[0-9]/) && val.length >= 8) {
+      strength = 'Strong password';
+      color = 'green';
+    } else {
+      strength = 'Moderate password';
+      color = 'orange';
+    }
+    strengthMsg.textContent = strength;
+    strengthMsg.style.color = color;
+  });
+
+  togglePassword.addEventListener('change', () => {
+    passwordInput.type = togglePassword.checked ? 'text' : 'password';
+  });
+</script>
+{% endblock %}
